@@ -4,27 +4,30 @@ public class pallindromecheckerapp {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+
+        // Input
         System.out.print("Input: ");
         String input = scanner.nextLine();
 
-        boolean isPalindrome = check(input, 0, input.length() - 1);
-        System.out.println("Is Palindrome? : " + isPalindrome);
+        // 1. Normalize string (Remove spaces/symbols and convert to lowercase)
+        // regex [^a-zA-Z0-9] replaces everything that is NOT a letter or number
+        String normalized = input.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+
+        // 2. Apply previous logic (Palindrome check)
+        boolean isPalindrome = true;
+
+        // Use the provided hint logic: Compare characters from both ends
+        for (int i = 0; i < normalized.length() / 2; i++) {
+            // Compare symmetric characters
+            if (normalized.charAt(i) != normalized.charAt(normalized.length() - 1 - i)) {
+                isPalindrome = false;
+                break;
+            }
+        }
+
+        // Output result
+        System.out.println("Is Palindrome?: " + isPalindrome);
 
         scanner.close();
-    }
-
-    private static boolean check(String s, int start, int end) {
-        // Base Condition: If indices meet or cross, it is a palindrome
-        if (start >= end) {
-            return true;
-        }
-
-        // Recursive call compares start & end
-        if (s.charAt(start) != s.charAt(end)) {
-            return false;
-        }
-
-        // Move inward using recursive calls
-        return check(s, start + 1, end - 1);
     }
 }
