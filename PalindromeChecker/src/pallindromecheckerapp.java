@@ -1,88 +1,54 @@
-import java.util.Stack;
-import java.util.ArrayDeque;
-import java.util.Deque;
+import java.util.Scanner;
 
-// 1. Define the Strategy Interface
-interface PalindromeStratergy {
-    boolean check(String input);
-}
-
-// 2. Implement StackStrategy (LIFO Behavior)
-class StackStrategy implements PalindromeStratergy {
-    @Override
-    public boolean check(String input) {
-        if (input == null || input.isEmpty()) return true;
-
-        String cleanInput = input.toLowerCase().replaceAll("[^a-z0-9]", "");
-        Stack<Character> stack = new Stack<>();
-
-        // Push characters onto stack
-        for (char c : cleanInput.toCharArray()) {
-            stack.push(c);
-        }
-
-        // Compare popped characters with original string
-        StringBuilder reversed = new StringBuilder();
-        while (!stack.isEmpty()) {
-            reversed.append(stack.pop());
-        }
-
-        return cleanInput.equals(reversed.toString());
-    }
-}
-
-// 3. Implement DequeStrategy (Double-Ended Queue)
-class DequeStrategy implements PalindromeStratergy {
-    @Override
-    public boolean check(String input) {
-        if (input == null || input.isEmpty()) return true;
-
-        String cleanInput = input.toLowerCase().replaceAll("[^a-z0-9]", "");
-        Deque<Character> deque = new ArrayDeque<>();
-
-        for (char c : cleanInput.toCharArray()) {
-            deque.addLast(c);
-        }
-
-        // Compare characters from both ends
-        while (deque.size() > 1) {
-            if (!deque.removeFirst().equals(deque.removeLast())) {
-                return false;
-            }
-        }
-        return true;
-    }
-}
-
-// 4. Main Application Class
 public class pallindromecheckerapp {
-    private PalindromeStratergy strategy;
-
-    // Inject strategy at runtime
-    public void setStrategy(PalindromeStratergy strategy) {
-        this.strategy = strategy;
-    }
-
-    public void validate(String text) {
-        if (strategy == null) {
-            System.out.println("Error: No strategy selected.");
-            return;
-        }
-        boolean result = strategy.check(text);
-        System.out.println("Strategy: " + strategy.getClass().getSimpleName());
-        System.out.println("Input: " + text + " | Is Palindrome: " + result + "\n");
-    }
 
     public static void main(String[] args) {
-        pallindromecheckerapp app = new pallindromecheckerapp();
-        String word = "Racecar";
+        Scanner scanner = new Scanner(System.in);
 
-        // Step 1: Use Stack Strategy
-        app.setStrategy(new StackStrategy());
-        app.validate(word);
+        System.out.print("Input : ");
+        String input = scanner.nextLine();
 
-        // Step 2: Swap to Deque Strategy at runtime
-        app.setStrategy(new DequeStrategy());
-        app.validate(word);
+        // 1. Capture execution start time
+        long startTime = System.nanoTime();
+
+        // 2. Run Algorithm (Two-pointer approach for efficiency)
+        boolean isPalindrome = checkPalindrome(input);
+
+        // 3. Capture execution end time
+        long endTime = System.nanoTime();
+
+        // 4. Calculate total execution duration
+        long executionTime = endTime - startTime;
+
+        // 5. Display benchmarking results
+        System.out.println("Is Palindrome? : " + isPalindrome);
+        System.out.println("Execution Time : " + executionTime + " ns");
+
+        scanner.close();
+    }
+
+    /**
+     * Core logic to check if a string is a palindrome.
+     * Uses a two-pointer approach for O(n) time complexity.
+     */
+    public static boolean checkPalindrome(String text) {
+        if (text == null || text.isEmpty()) {
+            return true;
+        }
+
+        // Standardizing input (removing non-alphanumeric and case sensitivity)
+        String cleanText = text.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+
+        int left = 0;
+        int right = cleanText.length() - 1;
+
+        while (left < right) {
+            if (cleanText.charAt(left) != cleanText.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        return true;
     }
 }
