@@ -1,33 +1,48 @@
-import java.util.Scanner;
-
 public class pallindromecheckerapp {
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        // Create an instance of the service
+        PalindromeService service = new PalindromeService();
 
-        // Input
-        System.out.print("Input: ");
-        String input = scanner.nextLine();
+        // Input string as per the example in the prompt
+        String input = "racecar";
 
-        // 1. Normalize string (Remove spaces/symbols and convert to lowercase)
-        // regex [^a-zA-Z0-9] replaces everything that is NOT a letter or number
-        String normalized = input.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+        // Check if the input is a palindrome
+        boolean result = service.checkPalindrome(input);
 
-        // 2. Apply previous logic (Palindrome check)
-        boolean isPalindrome = true;
+        // Output the result
+        System.out.println("Input : " + input);
+        System.out.println("Is Palindrome : " + result);
+    }
+}
 
-        // Use the provided hint logic: Compare characters from both ends
-        for (int i = 0; i < normalized.length() / 2; i++) {
-            // Compare symmetric characters
-            if (normalized.charAt(i) != normalized.charAt(normalized.length() - 1 - i)) {
-                isPalindrome = false;
-                break;
+/**
+ * Service class that contains palindrome logic.
+ */
+class PalindromeService {
+
+    /**
+     * Checks whether the input string is a palindrome.
+     * * @param input Input string
+     * @return true if palindrome, false otherwise
+     */
+    public boolean checkPalindrome(String input) {
+        // Handle null or empty cases
+        if (input == null) return false;
+
+        // Initialize pointers
+        int start = 0;
+        int end = input.length() - 1;
+
+        // Compare characters moving inward
+        while (start < end) {
+            if (input.charAt(start) != input.charAt(end)) {
+                return false; // Not a palindrome
             }
+            start++;
+            end--;
         }
 
-        // Output result
-        System.out.println("Is Palindrome?: " + isPalindrome);
-
-        scanner.close();
+        return true; // Is a palindrome
     }
 }
