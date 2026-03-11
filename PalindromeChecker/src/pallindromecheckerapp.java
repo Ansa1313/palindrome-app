@@ -1,32 +1,27 @@
-import java.util.Queue;
-import java.util.LinkedList;
-import java.util.Stack;
+import java.util.Deque;
+import java.util.ArrayDeque;
 
 public class pallindromecheckerapp {
 
     public static void main(String[] args) {
 
-        // String to validate
-        String input = "civic";
+        // Define the input string
+        String input = "refer";
 
-        // Create Queue (FIFO)
-        Queue<Character> queue = new LinkedList<>();
+        // Create a Deque to store characters
+        Deque<Character> deque = new ArrayDeque<>();
 
-        // Create Stack (LIFO)
-        Stack<Character> stack = new Stack<>();
-
-        // Insert characters into queue and stack
+        // Add each character to the deque
         for (char c : input.toCharArray()) {
-            queue.add(c);
-            stack.push(c);
+            deque.add(c);
         }
 
-        // Assume palindrome
+        // Flag to check palindrome
         boolean isPalindrome = true;
 
-        // Compare queue front and stack top
-        while (!queue.isEmpty()) {
-            if (queue.remove() != stack.pop()) {
+        // Compare first and last characters
+        while (deque.size() > 1) {
+            if (deque.removeFirst() != deque.removeLast()) {
                 isPalindrome = false;
                 break;
             }
